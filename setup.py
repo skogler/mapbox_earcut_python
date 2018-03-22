@@ -95,7 +95,7 @@ class BuildExt(build_ext):
 setup(
     name='mapbox_earcut',
     version=__version__,
-    url='https://github.com/skogler/mapbox_earcut',
+    url='https://github.com/skogler/mapbox_earcut_python',
     author='Samuel Kogler',
     author_email='samuel.kogler@gmail.com',
     description='Python bindings for the mapbox earcut C++ library.',
