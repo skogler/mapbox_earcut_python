@@ -20,7 +20,7 @@ py::array_t<IndexT> triangulate(py::array_t<CoordT> vertices, py::array_t<IndexT
         throw std::domain_error("ring_end_indices must be one-dimensional");
     }
     auto v = vertices.unchecked();
-    auto r = ring_end_indices.unchecked<1>();
+    auto r = ring_end_indices.template unchecked<1>();
     const ssize_t num_rings = r.shape(0);
     const ssize_t num_verts = v.shape(0);
     if (r(num_rings - 1) != num_verts)
