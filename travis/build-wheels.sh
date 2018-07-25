@@ -14,10 +14,10 @@ PYTHON_VERSIONS=(37 36 35)
 for VERSION in "${PYTHON_VERSIONS[@]}"; do
     PYBIN="/opt/python/cp${VERSION}-cp${VERSION}m/bin"
     "${PYBIN}/pip" install -r /io/dev-requirements.txt
-    "${PYBIN}/pip" wheel /io/ -w wheelhouse/
+    "${PYBIN}/pip" wheel /io/ -w /io/wheelhouse/
     # hack to get the appropriate wheel filename
     tmp=(/io/wheelhouse/mapbox_earcut*cp${VERSION}*.whl)
-    auditwheel repair ${tmp[0]} -w /io/wheelhouse/
+    auditwheel repair ${tmp[0]} -w /io/wheelhouse
     # test whether install works
     "${PYBIN}/pip" install mapbox_earcut --no-index -f /io/wheelhouse
 done
