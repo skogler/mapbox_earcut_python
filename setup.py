@@ -85,6 +85,7 @@ setup(
     description=
     'Python bindings for the mapbox earcut C++ polygon triangulation library.',
     long_description=get_readme_contents(),
+    long_description_content_type='text/markdown',
     license='ISC',
     ext_modules=[CMakeExtension('mapbox_earcut')],
     setup_requires=['setuptools_scm'],
