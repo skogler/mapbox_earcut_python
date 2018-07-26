@@ -6,20 +6,24 @@ namespace py = pybind11;
 
 #include <iostream>
 
-//! vertices: Nx2 numpy array
+//! vertices: (nverts, 2) numpy array
 //! ring_end_indices: the end indices for each ring. The last value must be equal to the number of input vertices.
 template<typename CoordT, typename IndexT>
 py::array_t<IndexT> triangulate(py::array_t<CoordT> vertices, py::array_t<IndexT> ring_end_indices)
 {
     if (vertices.ndim() != 2)
     {
-        throw std::domain_error("The shape of vertices is not 2xN");
+        throw std::domain_error("The shape of vertices is not (nverts, 2)!");
     }
     if (ring_end_indices.ndim() != 1)
     {
-        throw std::domain_error("ring_end_indices must be one-dimensional");
+        throw std::domain_error("ring_end_indices must be one-dimensional!");
     }
     auto v = vertices.unchecked();
+    if (v.shape(1) != 2)
+    {
+        throw std::domain_error("The second dimension of vertices is not 2!");
+    }
     auto r = ring_end_indices.template unchecked<1>();
     const ssize_t num_rings = r.shape(0);
     const ssize_t num_verts = v.shape(0);
@@ -33,9 +37,9 @@ py::array_t<IndexT> triangulate(py::array_t<CoordT> vertices, py::array_t<IndexT
     {
         const int start = ring == 0 ? 0 : r(ring - 1);
         const int end = r(ring);
-        if (end < start)
+        if (end <= start)
         {
-           throw std::invalid_argument("ring_end_indices must be in increasing order!");
+           throw std::invalid_argument("ring_end_indices must be in strictly increasing order!");
         }
         if (end > num_verts)
         {
