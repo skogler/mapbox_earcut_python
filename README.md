@@ -30,8 +30,11 @@ rings = np.array([3])
 
 result = earcut.triangulate_float32(verts, rings)
 
-print(np.shape(result))
-print(result)
-print(verts)
+# Result is an np.ndarray with dtype np.uint32 and shape (3,)
+# containing indices into the verts array.
+
 print(verts[result])
+# [[1 0]
+#  [1 1]
+#  [0 0]]
 ```
