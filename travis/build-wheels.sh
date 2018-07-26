@@ -11,6 +11,9 @@ export PATH="/opt/_internal/cpython-${PY_VER_MAJOR}.${PY_VER_MINOR}.${PY_VER_PAT
 
 PYTHON_VERSIONS=(37 36 35)
 
+# setuptools must be in the same directory apparently
+cd /io
+
 for VERSION in "${PYTHON_VERSIONS[@]}"; do
     PYBIN="/opt/python/cp${VERSION}-cp${VERSION}m/bin"
     "${PYBIN}/pip" install -r /io/dev-requirements.txt
