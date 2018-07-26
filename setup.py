@@ -9,6 +9,7 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
+FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
@@ -71,7 +72,7 @@ class CMakeBuild(build_ext):
 
 
 def get_readme_contents():
-    with open('README.md', 'r') as readme_file:
+    with open(os.path.join(FILE_DIR, 'README.md'), 'r') as readme_file:
         return readme_file.read()
 
 
