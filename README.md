@@ -13,7 +13,15 @@ Original description:
 > in a way that doesn't _guarantee_ correctness of triangulation, but attempts to
 > always produce acceptable results for practical data like geographical shapes.
 
+Provided functions (depending on dtype of vertex data):
+```python
+triangulate_float32
+triangulate_float64
+triangulate_int32
+triangulate_int64
+```
 
+Example:
 ```python
 
 import mapbox_earcut as earcut
