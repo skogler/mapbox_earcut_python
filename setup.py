@@ -95,4 +95,6 @@ setup(
     project_urls={
         'Source': 'https://github.com/skogler/mapbox_earcut_python',
         'Original C++ Source': 'https://github.com/mapbox/earcut.hpp',
-    })
+    },
+    include_package_data = True
+)
