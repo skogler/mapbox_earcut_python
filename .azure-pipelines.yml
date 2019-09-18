@@ -4,61 +4,61 @@ variables:
 
 stages:
   - stage: build wheels
-  jobs:
-  - job: linux
-    pool: {vmImage: 'Ubuntu-16.04'}
-    steps:
-      - checkout: self
-        submodules: true
-      - task: UsePythonVersion@0
-      - bash: |
-          python -m pip install --upgrade pip
-          pip install cibuildwheel==0.11.1
-          cibuildwheel --output-dir wheelhouse .
-      - task: PublishBuildArtifacts@1
-        inputs: {pathtoPublish: 'wheelhouse'}
-  - job: macos
-    pool: {vmImage: 'macOS-10.13'}
-    steps:
-      - checkout: self
-        submodules: true
-      - task: UsePythonVersion@0
-      - bash: |
-          python -m pip install --upgrade pip
-          pip install cibuildwheel==0.11.1
-          cibuildwheel --output-dir wheelhouse .
-      - task: PublishBuildArtifacts@1
-        inputs: {pathtoPublish: 'wheelhouse'}
-  - job: windows
-    pool: {vmImage: 'vs2017-win2016'}
-    steps:
-      - checkout: self
-        submodules: true
-      - {task: UsePythonVersion@0, inputs: {versionSpec: '3.5', architecture: x64}}
-      - {task: UsePythonVersion@0, inputs: {versionSpec: '3.6', architecture: x64}}
-      - {task: UsePythonVersion@0, inputs: {versionSpec: '3.7', architecture: x64}}
-      - bash: |
-          python -m pip install --upgrade pip
-          pip install cibuildwheel==0.11.1
-          cibuildwheel --output-dir wheelhouse .
-      - task: PublishBuildArtifacts@1
-        inputs: {pathtoPublish: 'wheelhouse'}
+    jobs:
+    - job: linux
+      pool: {vmImage: 'Ubuntu-16.04'}
+      steps:
+        - checkout: self
+          submodules: true
+        - task: UsePythonVersion@0
+        - bash: |
+            python -m pip install --upgrade pip
+            pip install cibuildwheel==0.11.1
+            cibuildwheel --output-dir wheelhouse .
+        - task: PublishBuildArtifacts@1
+          inputs: {pathtoPublish: 'wheelhouse'}
+    - job: macos
+      pool: {vmImage: 'macOS-10.13'}
+      steps:
+        - checkout: self
+          submodules: true
+        - task: UsePythonVersion@0
+        - bash: |
+            python -m pip install --upgrade pip
+            pip install cibuildwheel==0.11.1
+            cibuildwheel --output-dir wheelhouse .
+        - task: PublishBuildArtifacts@1
+          inputs: {pathtoPublish: 'wheelhouse'}
+    - job: windows
+      pool: {vmImage: 'vs2017-win2016'}
+      steps:
+        - checkout: self
+          submodules: true
+        - {task: UsePythonVersion@0, inputs: {versionSpec: '3.5', architecture: x64}}
+        - {task: UsePythonVersion@0, inputs: {versionSpec: '3.6', architecture: x64}}
+        - {task: UsePythonVersion@0, inputs: {versionSpec: '3.7', architecture: x64}}
+        - bash: |
+            python -m pip install --upgrade pip
+            pip install cibuildwheel==0.11.1
+            cibuildwheel --output-dir wheelhouse .
+        - task: PublishBuildArtifacts@1
+          inputs: {pathtoPublish: 'wheelhouse'}
   - stage: Publish wheels
-  jobs:
-    - deployment: publish_pypi
-    pool:
-      vmImage: 'Ubuntu-16.04'
-    environment: 'mapbox_earcut.wheels'
-        strategy:
-        runOnce:
-          deploy:
-            steps:
-            - task: DownloadBuildArtifacts@0
-              inputs:
-                downloadPath: '$(System.ArtifactsDirectory)'
-            - task: TwineAuthenticate@1
-              inputs:
-                artifactFeed: wheels
-            - script: |
-                python -m twine upload -r "wheels" --config-file $(PYPIRC_PATH) '$(System.ArtifactsDirectory)'/*.whl
+    jobs:
+      - deployment: publish_pypi
+      pool:
+        vmImage: 'Ubuntu-16.04'
+      environment: 'mapbox_earcut.wheels'
+          strategy:
+          runOnce:
+            deploy:
+              steps:
+              - task: DownloadBuildArtifacts@0
+                inputs:
+                  downloadPath: '$(System.ArtifactsDirectory)'
+              - task: TwineAuthenticate@1
+                inputs:
+                  artifactFeed: wheels
+              - script: |
+                  python -m twine upload -r "wheels" --config-file $(PYPIRC_PATH) '$(System.ArtifactsDirectory)'/*.whl
 
