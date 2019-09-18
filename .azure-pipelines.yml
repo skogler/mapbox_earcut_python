@@ -48,7 +48,7 @@ stages:
     - deployment: publish_pypi
       pool:
         vmImage: 'Ubuntu-16.04'
-      environment: 'mapbox_earcut.wheels'
+      environment: 'mapbox_earcut_python'
       strategy:
         runOnce:
           deploy:
