@@ -1,6 +1,6 @@
 # mapbox_earcut
 
-[![Build Status](https://api.travis-ci.org/skogler/mapbox_earcut_python.svg?branch=master)](https://travis-ci.org/skogler/mapbox_earcut_python)
+[![Build Status](https://dev.azure.com/skogler/mapbox_earcut_python/_apis/build/status/skogler.mapbox_earcut_python?branchName=master)](https://dev.azure.com/skogler/mapbox_earcut_python/_build/latest?definitionId=1&branchName=master)
 
 Python bindings for the C++ implementation of the Mapbox Earcut library, which
 provides very fast and quite robust triangulation of 2D polygons.
@@ -9,7 +9,7 @@ Original code: [earcut.hpp](https://github.com/mapbox/earcut.hpp)
 
 Original description:
 
-> The library implements a modified ear slicing algorithm, optimized by 
+> The library implements a modified ear slicing algorithm, optimized by
 > [z-order curve](http://en.wikipedia.org/wiki/Z-order_curve) hashing and
 > extended to handle holes, twisted polygons, degeneracies and self-intersections
 > in a way that doesn't _guarantee_ correctness of triangulation, but attempts to
