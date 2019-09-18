@@ -45,7 +45,7 @@ stages:
           inputs: {pathtoPublish: 'wheelhouse'}
   - stage: Publish wheels
     jobs:
-      - deployment: publish_pypi
+    - deployment: publish_pypi
       pool:
         vmImage: 'Ubuntu-16.04'
       environment: 'mapbox_earcut.wheels'
