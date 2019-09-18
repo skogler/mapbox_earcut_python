@@ -16,7 +16,9 @@ stages:
             pip install cibuildwheel==0.11.1
             cibuildwheel --output-dir wheelhouse .
         - task: PublishPipelineArtifact@1
-          inputs: {pathtoPublish: 'wheelhouse'}
+          inputs:
+            path: $(System.DefaultWorkingDirectory)/wheelhouse
+            artifact: wheelhouse
     # - job: macos
     #   pool: {vmImage: 'macOS-10.13'}
     #   steps:
@@ -54,6 +56,10 @@ stages:
           deploy:
             steps:
             - task: DownloadPipelineArtifact@2
+              inputs:
+                artifact: wheelhouse
+                patterns: '**/*.whl'
+                path: wheelhouse
             - script: |
                 pip install twine
             - task: TwineAuthenticate@1
@@ -62,5 +68,6 @@ stages:
             - script: |
                 pwd
                 ls -la
-                python -m twine upload -r "pypi_skogler" --config-file $(PYPIRC_PATH) *.whl
+                ls -la wheelhouse
+                python -m twine upload -r "pypi_skogler" --config-file $(PYPIRC_PATH) wheelhouse/*.whl
 
