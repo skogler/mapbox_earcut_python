@@ -3,7 +3,7 @@ variables:
   CIBW_BEFORE_BUILD: 'pip install cmake'
 
 stages:
-  - stage: build wheels
+  - stage: build_wheels
     jobs:
     - job: linux
       pool: {vmImage: 'Ubuntu-16.04'}
@@ -43,7 +43,7 @@ stages:
             cibuildwheel --output-dir wheelhouse .
         - task: PublishBuildArtifacts@1
           inputs: {pathtoPublish: 'wheelhouse'}
-  - stage: Publish wheels
+  - stage: publish_wheels
     jobs:
     - deployment: publish_pypi
       pool:
