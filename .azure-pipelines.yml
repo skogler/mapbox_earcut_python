@@ -5,6 +5,8 @@ jobs:
 - job: linux
   pool: {vmImage: 'Ubuntu-16.04'}
   steps:
+    - checkout: self
+      submodules: true
     - task: UsePythonVersion@0
     - bash: |
         python -m pip install --upgrade pip
@@ -15,6 +17,8 @@ jobs:
 - job: macos
   pool: {vmImage: 'macOS-10.13'}
   steps:
+    - checkout: self
+      submodules: true
     - task: UsePythonVersion@0
     - bash: |
         python -m pip install --upgrade pip
@@ -25,6 +29,8 @@ jobs:
 - job: windows
   pool: {vmImage: 'vs2017-win2016'}
   steps:
+    - checkout: self
+      submodules: true
     - {task: UsePythonVersion@0, inputs: {versionSpec: '3.5', architecture: x64}}
     - {task: UsePythonVersion@0, inputs: {versionSpec: '3.6', architecture: x64}}
     - {task: UsePythonVersion@0, inputs: {versionSpec: '3.7', architecture: x64}}
