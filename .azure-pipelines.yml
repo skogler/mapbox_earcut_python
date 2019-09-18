@@ -49,16 +49,16 @@ stages:
       pool:
         vmImage: 'Ubuntu-16.04'
       environment: 'mapbox_earcut.wheels'
-          strategy:
-          runOnce:
-            deploy:
-              steps:
-              - task: DownloadBuildArtifacts@0
-                inputs:
-                  downloadPath: '$(System.ArtifactsDirectory)'
-              - task: TwineAuthenticate@1
-                inputs:
-                  artifactFeed: wheels
-              - script: |
-                  python -m twine upload -r "wheels" --config-file $(PYPIRC_PATH) '$(System.ArtifactsDirectory)'/*.whl
+      strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              downloadPath: '$(System.ArtifactsDirectory)'
+          - task: TwineAuthenticate@1
+            inputs:
+              artifactFeed: wheels
+          - script: |
+              python -m twine upload -r "wheels" --config-file $(PYPIRC_PATH) '$(System.ArtifactsDirectory)'/*.whl
 
