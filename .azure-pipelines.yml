@@ -18,7 +18,7 @@ stages:
         - task: PublishPipelineArtifact@1
           inputs:
             path: $(System.DefaultWorkingDirectory)/wheelhouse
-            artifact: wheelhouse
+            artifact: wheels_linux
     - job: macos
       pool: {vmImage: 'macOS-10.13'}
       steps:
@@ -32,7 +32,7 @@ stages:
         - task: PublishPipelineArtifact@1
           inputs:
             path: $(System.DefaultWorkingDirectory)/wheelhouse
-            artifact: wheelhouse
+            artifact: wheels_mac
     - job: windows
       pool: {vmImage: 'vs2017-win2016'}
       steps:
@@ -48,8 +48,9 @@ stages:
         - task: PublishPipelineArtifact@1
           inputs:
             path: $(System.DefaultWorkingDirectory)/wheelhouse
-            artifact: wheelhouse
+            artifact: wheels_windows
   - stage: publish_wheels
+    condition: and(succeeded(), startsWith(variables['build.sourceBranch'], 'refs/tags/'))
     jobs:
     - deployment: publish_pypi
       pool:
@@ -59,16 +60,21 @@ stages:
         runOnce:
           deploy:
             steps:
-            - task: DownloadPipelineArtifact@2
-              inputs:
-                artifact: wheelhouse
-                patterns: '**/*.whl'
-                path: wheelhouse
+            - task: UsePythonVersion@0
             - script: |
                 pip install twine
+                pip install auditwheel
+            - checkout: self
+              submodules: true
+            - script: |
+                python setup.py sdist
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                patterns: '**/*.whl'
+                targetPath: dist
             - task: TwineAuthenticate@1
               inputs:
                 pythonUploadServiceConnection: pypi_upload_mapbox_earcut
             - script: |
-                python -m twine upload -r "pypi_skogler" --config-file $(PYPIRC_PATH) wheelhouse/*.whl
+                python -m twine upload -r "pypi_skogler" --config-file $(PYPIRC_PATH) dist/*.whl
 
