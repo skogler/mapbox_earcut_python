@@ -63,7 +63,6 @@ stages:
             - task: UsePythonVersion@0
             - script: |
                 pip install twine
-                pip install auditwheel
             - checkout: self
               submodules: true
             - script: |
@@ -76,5 +75,5 @@ stages:
               inputs:
                 pythonUploadServiceConnection: pypi_upload_mapbox_earcut
             - script: |
-                python -m twine upload -r "pypi_skogler" --config-file $(PYPIRC_PATH) dist/*.whl
-
+                python -m twine upload -r "pypi_skogler" --config-file $(PYPIRC_PATH) dist/*
+u
