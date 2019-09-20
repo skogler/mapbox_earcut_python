@@ -76,4 +76,3 @@ stages:
                 pythonUploadServiceConnection: pypi_upload_mapbox_earcut
             - script: |
                 python -m twine upload -r "pypi_skogler" --config-file $(PYPIRC_PATH) dist/*
-u
