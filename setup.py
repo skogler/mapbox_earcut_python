@@ -78,7 +78,7 @@ def get_readme_contents():
 
 setup(
     name='mapbox_earcut',
-    version='0.12.7',
+    version='0.12.10',
     url='https://github.com/skogler/mapbox_earcut_python',
     author='Samuel Kogler',
     author_email='samuel.kogler@gmail.com',
