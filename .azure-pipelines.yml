@@ -24,7 +24,7 @@ stages:
         - task: PublishPipelineArtifact@1
           inputs:
             path: $(System.DefaultWorkingDirectory)/wheelhouse
-            artifact: wheels
+            artifact: wheels_linux
     - job: macos
       pool: {vmImage: 'macOS-10.15'}
       steps:
@@ -38,7 +38,7 @@ stages:
         - task: PublishPipelineArtifact@1
           inputs:
             path: $(System.DefaultWorkingDirectory)/wheelhouse
-            artifact: wheels
+            artifact: wheels_mac
     - job: windows
       pool: {vmImage: 'vs2017-win2016'}
       steps:
@@ -52,7 +52,7 @@ stages:
         - task: PublishPipelineArtifact@1
           inputs:
             path: $(System.DefaultWorkingDirectory)/wheelhouse
-            artifact: wheels
+            artifact: wheels_windows
   - stage: publish_wheels
     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
     jobs:
