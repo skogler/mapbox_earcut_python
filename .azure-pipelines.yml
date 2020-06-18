@@ -6,7 +6,7 @@ stages:
   - stage: build_wheels
     jobs:
     - job: linux
-      pool: {vmImage: 'Ubuntu-16.04'}
+      pool: {vmImage: 'Ubuntu-18.04'}
       steps:
         - checkout: self
           submodules: true
@@ -20,7 +20,7 @@ stages:
             path: $(System.DefaultWorkingDirectory)/wheelhouse
             artifact: wheels_linux
     - job: macos
-      pool: {vmImage: 'macOS-10.13'}
+      pool: {vmImage: 'macOS-10.15'}
       steps:
         - checkout: self
           submodules: true
