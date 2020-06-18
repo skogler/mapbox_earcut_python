@@ -2,23 +2,29 @@ variables:
   CIBW_SKIP: 'cp27-* cp34-* *-win32 *-manylinux1_i686'
   CIBW_BEFORE_BUILD: 'pip install cmake'
 
+trigger:
+  branches:
+    include:
+    - master
+    - refs/tags/*
+
 stages:
   - stage: build_wheels
     jobs:
     - job: linux
-      pool: {vmImage: 'Ubuntu-18.04'}
+      pool: {vmImage: 'Ubuntu-16.04'}
       steps:
         - checkout: self
           submodules: true
         - task: UsePythonVersion@0
         - bash: |
             python -m pip install --upgrade pip
-            pip install cibuildwheel==0.11.1
+            pip3 install cibuildwheel==1.4.2
             cibuildwheel --output-dir wheelhouse .
         - task: PublishPipelineArtifact@1
           inputs:
             path: $(System.DefaultWorkingDirectory)/wheelhouse
-            artifact: wheels_linux
+            artifact: wheels
     - job: macos
       pool: {vmImage: 'macOS-10.15'}
       steps:
@@ -27,35 +33,32 @@ stages:
         - task: UsePythonVersion@0
         - bash: |
             python -m pip install --upgrade pip
-            pip install cibuildwheel==0.11.1
+            pip3 install cibuildwheel==1.4.2
             cibuildwheel --output-dir wheelhouse .
         - task: PublishPipelineArtifact@1
           inputs:
             path: $(System.DefaultWorkingDirectory)/wheelhouse
-            artifact: wheels_mac
+            artifact: wheels
     - job: windows
       pool: {vmImage: 'vs2017-win2016'}
       steps:
         - checkout: self
           submodules: true
-        - {task: UsePythonVersion@0, inputs: {versionSpec: '3.5', architecture: x64}}
-        - {task: UsePythonVersion@0, inputs: {versionSpec: '3.6', architecture: x64}}
-        - {task: UsePythonVersion@0, inputs: {versionSpec: '3.7', architecture: x64}}
-        - {task: UsePythonVersion@0, inputs: {versionSpec: '3.8', architecture: x64}}
+        - task: UsePythonVersion@0
         - bash: |
             python -m pip install --upgrade pip
-            pip install cibuildwheel==0.11.1
+            pip3 install cibuildwheel==1.4.2
             cibuildwheel --output-dir wheelhouse .
         - task: PublishPipelineArtifact@1
           inputs:
             path: $(System.DefaultWorkingDirectory)/wheelhouse
-            artifact: wheels_windows
+            artifact: wheels
   - stage: publish_wheels
-    condition: and(succeeded(), startsWith(variables['build.sourceBranch'], 'refs/tags/'))
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
     jobs:
     - deployment: publish_pypi
       pool:
-        vmImage: 'Ubuntu-18.04'
+        vmImage: 'Ubuntu-16.04'
       environment: 'mapbox_earcut_python'
       strategy:
         runOnce:
