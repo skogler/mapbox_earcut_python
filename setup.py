@@ -51,9 +51,10 @@ class CMakeBuild(build_ext):
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(
                     cfg.upper(), extdir)
             ]
-            if sys.maxsize > 2**32:
-                cmake_args += ['-A', 'x64']
-            build_args += ['--', '/m']
+            if os.environ.get("CMAKE_GENERATOR") != "NMake Makefiles":
+                if sys.maxsize > 2**32:
+                    cmake_args += ['-A', 'x64']
+                build_args += ['--', '/m']
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
             build_args += ['--', '-j8']
@@ -88,7 +89,6 @@ setup(
     long_description_content_type='text/markdown',
     license='ISC',
     ext_modules=[CMakeExtension('mapbox_earcut')],
-    setup_requires=['setuptools_scm'],
     install_requires=['numpy'],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
