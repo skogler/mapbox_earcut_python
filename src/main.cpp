@@ -2,6 +2,9 @@
 #include <pybind11/numpy.h>
 #include <mapbox/earcut.hpp>
 
+#define IDENT_TO_STR(x) #x
+#define MACRO_TO_STR(x) IDENT_TO_STR(x)
+
 namespace py = pybind11;
 
 #include <iostream>
@@ -85,7 +88,8 @@ PYBIND11_MODULE(mapbox_earcut, m)
     m.def("triangulate_float64", &triangulate<double, uint32_t>);
 
 #ifdef VERSION_INFO
-    m.attr("__version__") = "VERSION_INFO";
+    
+    m.attr("__version__") = MACRO_TO_STR(VERSION_INFO) ;
 #else
     m.attr("__version__") = "dev";
 #endif
