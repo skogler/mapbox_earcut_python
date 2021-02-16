@@ -85,7 +85,7 @@ PYBIND11_MODULE(mapbox_earcut, m)
     m.def("triangulate_float64", &triangulate<double, uint32_t>);
 
 #ifdef VERSION_INFO
-    m.attr("__version__") = VERSION_INFO;
+    m.attr("__version__") = "VERSION_INFO";
 #else
     m.attr("__version__") = "dev";
 #endif

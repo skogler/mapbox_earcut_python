@@ -1,7 +1,5 @@
 # mapbox_earcut
 
-[![Build Status](https://dev.azure.com/skogler/mapbox_earcut_python/_apis/build/status/skogler.mapbox_earcut_python?branchName=master)](https://dev.azure.com/skogler/mapbox_earcut_python/_build/latest?definitionId=1&branchName=master)
-
 Python bindings for the C++ implementation of the Mapbox Earcut library, which
 provides very fast and quite robust triangulation of 2D polygons.
 
