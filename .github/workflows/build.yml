@@ -32,6 +32,12 @@ jobs:
       - name: Build wheels
         run: |
           python -m cibuildwheel --output-dir wheelhouse
+        env:
+          # Python 2.7 on Windows does not support C++11 by default, skipping it since its EOL anyways.
+          CIBW_SKIP: cp27-win*
+      - name: Show files
+        run: ls -lh wheelhouse
+        shell: bash
 
       - uses: actions/upload-artifact@v2
         with:
