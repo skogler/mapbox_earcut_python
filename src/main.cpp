@@ -1,6 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <mapbox/earcut.hpp>
+#include <stdint.h>
 
 #define IDENT_TO_STR(x) #x
 #define MACRO_TO_STR(x) IDENT_TO_STR(x)
@@ -28,8 +29,8 @@ py::array_t<IndexT> triangulate(py::array_t<CoordT> vertices, py::array_t<IndexT
         throw std::domain_error("The second dimension of vertices is not 2!");
     }
     auto r = ring_end_indices.template unchecked<1>();
-    const ssize_t num_rings = r.shape(0);
-    const ssize_t num_verts = v.shape(0);
+    const auto num_rings = r.shape(0);
+    const auto num_verts = v.shape(0);
     if (r(num_rings - 1) != num_verts)
     {
         throw std::invalid_argument("The last value of ring_end_indices must be equal to the number of vertices!");
@@ -88,7 +89,7 @@ PYBIND11_MODULE(mapbox_earcut, m)
     m.def("triangulate_float64", &triangulate<double, uint32_t>);
 
 #ifdef VERSION_INFO
-    
+
     m.attr("__version__") = MACRO_TO_STR(VERSION_INFO) ;
 #else
     m.attr("__version__") = "dev";
