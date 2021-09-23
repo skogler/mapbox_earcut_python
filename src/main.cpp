@@ -1,14 +1,16 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <mapbox/earcut.hpp>
-#include <stdint.h>
+
+#include <iostream>
+#include <vector>
 
 #define IDENT_TO_STR(x) #x
 #define MACRO_TO_STR(x) IDENT_TO_STR(x)
 
 namespace py = pybind11;
 
-#include <iostream>
+
 
 //! vertices: (nverts, 2) numpy array
 //! ring_end_indices: the end indices for each ring. The last value must be equal to the number of input vertices.
