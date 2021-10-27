@@ -74,7 +74,7 @@ def test_end_index_too_large():
     verts = np.array([[0, 0], [1, 0], [1, 1]]).reshape(-1, 2)
     rings = np.array([5])
 
-    with pytest.raises(ValueError, message="Expecting ValueError"):
+    with pytest.raises(ValueError):
         result = earcut.triangulate_float32(verts, rings)
 
 
@@ -82,7 +82,7 @@ def test_end_index_too_small():
     verts = np.array([[0, 0], [1, 0], [1, 1]]).reshape(-1, 2)
     rings = np.array([2])
 
-    with pytest.raises(ValueError, message="Expecting ValueError"):
+    with pytest.raises(ValueError):
         result = earcut.triangulate_float32(verts, rings)
 
 
@@ -90,7 +90,7 @@ def test_end_index_neg():
     verts = np.array([[0, 0], [1, 0], [1, 1]]).reshape(-1, 2)
     rings = np.array([-1])
 
-    with pytest.raises(ValueError, message="Expecting ValueError"):
+    with pytest.raises(ValueError):
         result = earcut.triangulate_float32(verts, rings)
 
 
@@ -98,7 +98,7 @@ def test_rings_not_increasing():
     verts = np.array([[0, 0], [1, 0], [1, 1]]).reshape(-1, 2)
     rings = np.array([3, 0, 3])
 
-    with pytest.raises(ValueError, message="Expecting ValueError"):
+    with pytest.raises(ValueError):
         result = earcut.triangulate_float32(verts, rings)
 
 
@@ -106,7 +106,7 @@ def test_rings_same():
     verts = np.array([[0, 0], [1, 0], [1, 1]]).reshape(-1, 2)
     rings = np.array([3, 3])
 
-    with pytest.raises(ValueError, message="Expecting ValueError"):
+    with pytest.raises(ValueError):
         result = earcut.triangulate_float32(verts, rings)
 
 
@@ -114,7 +114,7 @@ def test_no_rings():
     verts = np.array([[0, 0], [1, 0], [1, 1]]).reshape(-1, 2)
     rings = np.array([])
 
-    with pytest.raises(ValueError, message="Expecting ValueError"):
+    with pytest.raises(ValueError):
         result = earcut.triangulate_float32(verts, rings)
 
 
@@ -122,7 +122,7 @@ def test_no_rings():
     verts = np.array([[0, 0], [1, 0], [1, 1]]).reshape(-1, 2)
     rings = np.array([])
 
-    with pytest.raises(ValueError, message="Expecting ValueError"):
+    with pytest.raises(ValueError):
         result = earcut.triangulate_float32(verts, rings)
 
 
