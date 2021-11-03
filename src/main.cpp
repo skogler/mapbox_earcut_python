@@ -33,10 +33,16 @@ py::array_t<IndexT> triangulate(py::array_t<CoordT> vertices, py::array_t<IndexT
     auto r = ring_end_indices.template unchecked<1>();
     const auto num_rings = r.shape(0);
     const auto num_verts = v.shape(0);
-    if (((num_rings > 0) && (r(num_rings - 1) != num_verts)) ||
-        ((num_rings <= 0) && (num_verts > 0)))
+    if (num_rings > 0)
     {
-        throw std::invalid_argument("The last value of ring_end_indices must be equal to the number of vertices!");
+        if (r(num_rings - 1) != num_verts)
+        {
+             throw std::invalid_argument("The last value of ring_end_indices must be equal to the number of vertices!");
+        }
+    }
+    else if (num_verts > 0)
+    {
+       throw std::invalid_argument("ring_end_indices is empty, but vertices is not! This seems like it might not be intentional.");
     }
     using Point = std::array<CoordT, 2>;
     std::vector<std::vector<Point>> polygon;
