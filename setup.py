@@ -4,7 +4,7 @@ from setuptools import setup
 from pybind11.setup_helpers import Pybind11Extension, build_ext
 
 FILE_DIR = os.path.dirname(os.path.abspath(__file__))
-VERSION = '0.12.11'
+VERSION = '1.0.0'
 
 ext_modules = [
     Pybind11Extension('mapbox_earcut',
