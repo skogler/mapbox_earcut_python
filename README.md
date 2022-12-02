@@ -1,5 +1,7 @@
 # mapbox_earcut
 
+[![PyPi version](https://badgen.net/pypi/v/mapbox-earcut/)](https://pypi.org/project/mapbox-earcut)
+
 Python bindings for the C++ implementation of the Mapbox Earcut library, which
 provides very fast and quite robust triangulation of 2D polygons.
 
