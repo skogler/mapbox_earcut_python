@@ -1,10 +1,27 @@
 # Changelog
 
-## [Unreleased]
+## [1.0.1]
+
+### Fixed
+
+- Outdated `__version__` attribute
 
 ### Changed
 
 - Update `earcut.hpp` to 2.2.4
+
+### Added
+
+- Build for Mac ARM (apple silicon)
+- Build for Python 3.11 and 3.10
+
+## [1.0.0]
+
+### Changed
+
+- Update `earcut.hpp` to 2.2.3 (with fixed includes, latest version from master).
+- Change versioning scheme to enable semantic versioning independently from upstream versioning.
+
 
 ## [1.0.0]
 
