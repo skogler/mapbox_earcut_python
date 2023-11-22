@@ -20,11 +20,10 @@ jobs:
         name: artifact
         path: dist
     - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          body_path: ./CHANGELOG.md
-          files: 
-            - "dist/*"
+      uses: softprops/action-gh-release@v1
+      with:
+        body_path: ./CHANGELOG.md
+        files: dist/*
   upload_pypi:
     needs: [build, create_release]
     runs-on: ubuntu-latest
