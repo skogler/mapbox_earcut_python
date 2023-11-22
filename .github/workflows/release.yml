@@ -11,6 +11,8 @@ jobs:
   create_release:
     needs: [build]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -19,21 +21,5 @@ jobs:
       with:
         name: artifact
         path: dist
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      with:
-        body_path: ./CHANGELOG.md
-        files: dist/*
-  upload_pypi:
-    needs: [build, create_release]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download wheels
-        uses: actions/download-artifact@v3
-        with:
-          name: artifact
-          path: dist
-      - uses: pypa/gh-action-pypi-publish@v1.5.2
-        with:
-          user: __token__
-          password: ${{ secrets.pypi_password }}
+    - name: Publish release distributions to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
