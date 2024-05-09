@@ -3,5 +3,18 @@ requires = [
     "setuptools>=42",
     "wheel",
     "pybind11~=2.6",
+    "numpy==1.26.4" 
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.cibuildwheel]
+# install the `test` extra
+test-extras = ["test"]
+# Run the package tests using `pytest`
+
+test-command = "pytest {package}/tests && pip install --force-reinstall --upgrade --pre numpy && pytest {package}/tests"
+test-skip = "*_arm64 *_universal2:arm64"
+
+[tool.cibuildwheel.macos]
+archs = ["x86_64", "arm64"]
+
