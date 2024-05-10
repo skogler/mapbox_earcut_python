@@ -2,8 +2,7 @@
 requires = [
     "setuptools>=42",
     "wheel",
-    "pybind11~=2.6",
-    "numpy>=1.19.0"
+    "pybind11==2.12.0",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -35,14 +34,16 @@ test = ["pytest"]
 [tool.cibuildwheel]
 # install the `test` extra
 test-extras = ["test"]
+
 # Run the package tests using `pytest`
+# also test against pre-release Numpy
+# TODO : when numpy 2.0 releases this can be reduced to just one pytest
+test-command = ["pytest {package}/tests",
+	        "pip install --force-reinstall --upgrade --pre numpy",
+		"pytest {package}/tests"]
 
-test-command = "pytest {package}/tests && pip install --force-reinstall --upgrade --pre numpy && pytest {package}/tests"
-
-test-skip = "*_arm64 *_universal2:arm64"
-
-# Numpy only builds wheels for very specific versions of PyPy for some reasy
-skip = "pp*"
+# don't test on PyPy as it will re-build numpy
+test-skip = "*_arm64 *_universal2:arm64 pp*"
 
 [tool.cibuildwheel.macos]
 archs = ["x86_64", "arm64"]
