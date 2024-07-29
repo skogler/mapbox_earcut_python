@@ -14,7 +14,7 @@ requires-python = ">=3.8"
 authors = [{name = "Samuel Kogler", email = "samuel.kogler@gmail.com"}]
 license =  {file = "LICENSE.md"}
 description = "Python bindings for the mapbox earcut C++ polygon triangulation library."
-dependencies = ["numpy>=1.19.0"]
+dependencies = ["numpy>=1.24.0"]
 
 [project.urls]
 Source = "https://github.com/skogler/mapbox_earcut_python"
@@ -33,6 +33,7 @@ test = ["pytest"]
 
 
 [tool.cibuildwheel]
+skip = "pp*"
 # install the `test` extra
 test-extras = ["test"]
 
@@ -44,7 +45,7 @@ test-command = ["pytest {package}/tests",
 		"pytest {package}/tests"]
 
 # don't test on PyPy as it will re-build numpy
-test-skip = "*_arm64 *_universal2:arm64 pp*"
+test-skip = "*_arm64 *_universal2:arm64"
 
 [tool.cibuildwheel.macos]
 archs = ["x86_64", "arm64"]
