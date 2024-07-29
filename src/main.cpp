@@ -77,13 +77,13 @@ py::array_t<IndexT> triangulate(py::array_t<CoordT> vertices, py::array_t<IndexT
     );
 }
 
-PYBIND11_MODULE(mapbox_earcut, m)
+PYBIND11_MODULE(earcutx, m)
 {
     m.doc() = R"pbdoc(
         Python bindings to mapbox/earcut.hpp
         -----------------------
 
-        .. currentmodule:: mapbox_earcut
+        .. currentmodule:: earcutx
 
         .. autosummary::
            :toctree: _generate

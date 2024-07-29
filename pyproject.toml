@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "earcutx"
-version = "1.0.3"
+version = "1.0.4"
 requires-python = ">=3.8"
 authors = [{name = "Samuel Kogler", email = "samuel.kogler@gmail.com"}]
 license =  {file = "LICENSE.md"}
@@ -38,11 +38,7 @@ skip = "pp*"
 test-extras = ["test"]
 
 # Run the package tests using `pytest`
-# also test against pre-release Numpy
-# TODO : when numpy 2.0 releases this can be reduced to just one pytest
-test-command = ["pytest {package}/tests",
-	        "pip install --force-reinstall --upgrade --pre numpy",
-		"pytest {package}/tests"]
+test-command = "pytest {package}/tests"
 
 # don't test on PyPy as it will re-build numpy
 test-skip = "*_arm64 *_universal2:arm64"

@@ -33,7 +33,7 @@ def _get_version() -> str:
 
 ext_modules = [
     Pybind11Extension(
-        "mapbox_earcut",
+        "earcutx",
         ["src/main.cpp"],
         include_dirs=["include"],
         define_macros=[("VERSION_INFO", _get_version())],
