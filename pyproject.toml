@@ -2,15 +2,15 @@
 requires = [
     "setuptools>=42",
     "wheel",
-    "pybind11==2.12.0",
+    "pybind11>=2.12.0",
     "tomli>=0.10; python_version<'3.11'",
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mapbox_earcut"
-version = "1.0.2"
-requires-python = ">=3.7"
+name = "earcutx"
+version = "1.0.3"
+requires-python = ">=3.8"
 authors = [{name = "Samuel Kogler", email = "samuel.kogler@gmail.com"}]
 license =  {file = "LICENSE.md"}
 description = "Python bindings for the mapbox earcut C++ polygon triangulation library."
