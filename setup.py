@@ -30,6 +30,7 @@ setup(
     long_description_content_type='text/markdown',
     license='ISC',
     ext_modules=ext_modules,
+    python_requires='>=3.8',
     install_requires=['numpy'],
     extras_require={'test': 'pytest'},
     cmdclass=dict(build_ext=build_ext),
