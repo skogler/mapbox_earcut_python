@@ -19,7 +19,7 @@ jobs:
     - name: Download wheels
       uses: actions/download-artifact@v4
       with:
-        name: artifact
         path: dist
+        merge-multiple: true
     - name: Publish release distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
