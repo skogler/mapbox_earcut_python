@@ -21,5 +21,15 @@ jobs:
       with:
         path: dist
         merge-multiple: true
+    - name: Extract Changelog
+      run: |
+        VERSION=${GITHUB_REF#refs/*/}
+        sed -n "/^## \\[${VERSION:1}\\]/,/^## \\[/p" CHANGELOG.md | sed '1,1d; $d' > RELEASE.md
+    - name: Publish release to GitHub
+      uses: softprops/action-gh-release@v2
+      with:
+        draft: true
+        body_path: RELEASE.md
+        files: dist/*.whl
     - name: Publish release distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
