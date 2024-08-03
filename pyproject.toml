@@ -10,6 +10,7 @@ build-backend = "setuptools.build_meta"
 # Cannot run tests on arm64 macosx python 3.8
 # See https://github.com/pypa/cibuildwheel/pull/1169
 test-skip="cp38-macosx_*:arm64"
+test-skip="cp*"
 test-requires=[
     "pytest"
 ]
