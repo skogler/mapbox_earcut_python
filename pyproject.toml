@@ -8,8 +8,13 @@ build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
 # These crash on GitHub Actions but work locally, skip for now
-test-skip="pp310-win*"
-test-requires=[
+test-skip = "pp310-win*"
+test-requires = [
     "pytest"
 ]
-test-command="pytest {package}/tests"
+test-command = "pytest {package}/tests"
+
+[tool.cibuildwheel.linux]
+archs = [
+    "x86_64"
+]
