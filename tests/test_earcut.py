@@ -75,7 +75,7 @@ def test_end_index_too_large():
     rings = np.array([5])
 
     with pytest.raises(ValueError):
-        result = earcut.triangulate_float32(verts, rings)
+        _ = earcut.triangulate_float32(verts, rings)
 
 
 def test_end_index_too_small():
@@ -83,7 +83,7 @@ def test_end_index_too_small():
     rings = np.array([2])
 
     with pytest.raises(ValueError):
-        result = earcut.triangulate_float32(verts, rings)
+        _ = earcut.triangulate_float32(verts, rings)
 
 
 def test_end_index_neg():
@@ -91,7 +91,7 @@ def test_end_index_neg():
     rings = np.array([-1])
 
     with pytest.raises(ValueError):
-        result = earcut.triangulate_float32(verts, rings)
+        _ = earcut.triangulate_float32(verts, rings)
 
 
 def test_rings_not_increasing():
@@ -99,7 +99,7 @@ def test_rings_not_increasing():
     rings = np.array([3, 0, 3])
 
     with pytest.raises(ValueError):
-        result = earcut.triangulate_float32(verts, rings)
+        _ = earcut.triangulate_float32(verts, rings)
 
 
 def test_rings_same():
@@ -107,7 +107,7 @@ def test_rings_same():
     rings = np.array([3, 3])
 
     with pytest.raises(ValueError):
-        result = earcut.triangulate_float32(verts, rings)
+        _ = earcut.triangulate_float32(verts, rings)
 
 
 def test_no_rings():
@@ -115,15 +115,7 @@ def test_no_rings():
     rings = np.array([])
 
     with pytest.raises(ValueError):
-        result = earcut.triangulate_float32(verts, rings)
-
-
-def test_no_rings():
-    verts = np.array([[0, 0], [1, 0], [1, 1]]).reshape(-1, 2)
-    rings = np.array([])
-
-    with pytest.raises(ValueError):
-        result = earcut.triangulate_float32(verts, rings)
+        _ = earcut.triangulate_float32(verts, rings)
 
 
 def test_empty_data():
