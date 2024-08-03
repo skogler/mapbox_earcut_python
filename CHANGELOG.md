@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.2]
+
+## Changed
+
+- Require Python 3.9
+- Built wheels are now compatible with numpy 2
+- Reduced set of pre-built wheels to match numpy
+  - 32-bit Linux is not supported anymore:
+    - numpy does not ship any wheels for these, so builds take a long time
+    - numpy does not compile on some PyPy versions
+
 ## [1.0.1]
 
 ### Fixed
