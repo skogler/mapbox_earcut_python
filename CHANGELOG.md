@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.3]
+
+## Changed
+
+- Build now uses scikit-build instead of setuptools
+
+## Added
+
+- Wheels for Python 3.13
+
 ## [1.0.2]
 
 ## Changed
