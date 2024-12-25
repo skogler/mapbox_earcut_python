@@ -1,3 +1,5 @@
+#include "version.hpp"
+
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <mapbox/earcut.hpp>
@@ -9,8 +11,6 @@
 #define MACRO_TO_STR(x) IDENT_TO_STR(x)
 
 namespace py = pybind11;
-
-
 
 //! vertices: (nverts, 2) numpy array
 //! ring_end_indices: the end indices for each ring. The last value must be equal to the number of input vertices.
@@ -79,6 +79,7 @@ py::array_t<IndexT> triangulate(py::array_t<CoordT> vertices, py::array_t<IndexT
 
 PYBIND11_MODULE(mapbox_earcut, m)
 {
+    m.attr("__version__") = MACRO_TO_STR(VERSION_MAJOR) "." MACRO_TO_STR(VERSION_MINOR) "." MACRO_TO_STR(VERSION_PATCH);
     m.doc() = R"pbdoc(
         Python bindings to mapbox/earcut.hpp
         -----------------------
@@ -96,11 +97,4 @@ PYBIND11_MODULE(mapbox_earcut, m)
     m.def("triangulate_int64", &triangulate<int64_t, uint32_t>);
     m.def("triangulate_float32", &triangulate<float, uint32_t>);
     m.def("triangulate_float64", &triangulate<double, uint32_t>);
-
-#ifdef VERSION_INFO
-
-    m.attr("__version__") = MACRO_TO_STR(VERSION_INFO) ;
-#else
-    m.attr("__version__") = "dev";
-#endif
 }

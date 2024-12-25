@@ -1,6 +1,6 @@
 [project]
 name = "mapbox_earcut"
-version = "1.0.2"
+dynamic = ["version"]
 description = "Python bindings for the mapbox earcut C++ polygon triangulation library"
 readme = "README.md"
 authors = [{ name = "Samuel Kogler" }]
@@ -21,13 +21,19 @@ dependencies = [
     "numpy",
 ]
 
+[tool.scikit-build.metadata.version]
+provider = "scikit_build_core.metadata.regex"
+input = "include/version.hpp"
+regex = '''(?sx)
+\#define \s+ VERSION_MAJOR \s+ (?P<major>\d+) .*?
+\#define \s+ VERSION_MINOR \s+ (?P<minor>\d+) .*?
+\#define \s+ VERSION_PATCH \s+ (?P<patch>\d+) .*?
+'''
+result = "{major}.{minor}.{patch}"
 
 [build-system]
 requires = ["pybind11>=2.12", "scikit-build-core"]
 build-backend = "scikit_build_core.build"
-
-[tool.scikit-build.cmake.define]
-VERSION_INFO = "1.0.2"
 
 [tool.cibuildwheel]
 # These crash on GitHub Actions but work locally, skip for now
