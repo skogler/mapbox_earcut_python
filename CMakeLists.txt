@@ -1,30 +1,13 @@
-cmake_minimum_required(VERSION 3.15...3.29)
+cmake_minimum_required(VERSION 3.15...3.27)
 project(mapbox_earcut LANGUAGES CXX)
 
-if (NOT SKBUILD)
-  message(WARNING "\
-  This CMake file is meant to be executed using 'scikit-build-core'.
-  Running it directly will almost certainly not produce the desired
-  result. If you are a user trying to install this package, use the
-  command below, which will install all necessary build dependencies,
-  compile the package in an isolated environment, and then install it.
-  =====================================================================
-   $ uv sync
-  =====================================================================
-  If you are a software developer, and this is your own package, then
-  it is usually much more efficient to install the build dependencies
-  in your environment once and use the following command that avoids
-  a costly creation of a new virtual environment at every compilation:
-  =====================================================================
-   $ uv build
-  =====================================================================
-  You may optionally add -Ceditable.rebuild=true to auto-rebuild when
-  the package is imported. Otherwise, you need to rerun the above
-  after editing C++ files.")
+if(CMAKE_VERSION VERSION_LESS 3.18)
+  set(DEV_MODULE Development)
+else()
+  set(DEV_MODULE Development.Module)
 endif()
 
-find_package(Python COMPONENTS Interpreter Development
-        REQUIRED)
+find_package(Python COMPONENTS Interpreter ${DEV_MODULE} REQUIRED)
 execute_process(
   COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
   OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE nanobind_ROOT)
