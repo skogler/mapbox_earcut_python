@@ -46,8 +46,6 @@ requires = ["nanobind>=2.9.2", "scikit-build-core>=0.11.6"]
 build-backend = "scikit_build_core.build"
 
 [tool.cibuildwheel]
-# These crash on GitHub Actions but work locally, skip for now
-test-skip = "pp310-win*"
 test-requires = ["pytest"]
 test-command = "pytest {package}/tests"
 

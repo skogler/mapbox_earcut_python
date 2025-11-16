@@ -6,10 +6,9 @@ with multiple threads when running Python with the GIL disabled.
 """
 
 import sys
-from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 import threading
-from typing import Any
+from typing import Any, Callable, List, Optional, Tuple, Union
 
 import mapbox_earcut as earcut
 import numpy as np
@@ -23,7 +22,7 @@ def run_threaded(
     pass_count: bool = False,
     pass_barrier: bool = False,
     outer_iterations: int = 1,
-    prepare_args: Callable[[], list[Any]] | None = None,
+    prepare_args: Optional[Callable[[], List[Any]]] = None,
 ) -> None:
     """
     Runs a function many times in parallel.
@@ -48,16 +47,19 @@ def run_threaded(
             if pass_barrier:
                 barrier = threading.Barrier(num_threads)
                 args.append(barrier)
+            else:
+                barrier = None
             if pass_count:
                 all_args = [(func, i, *args) for i in range(num_threads)]
             else:
                 all_args = [(func, *args) for i in range(num_threads)]
+
+            futures = []
             try:
-                futures = []
                 for arg in all_args:
                     futures.append(tpe.submit(*arg))
             finally:
-                if len(futures) < num_threads and pass_barrier:
+                if len(futures) < num_threads and barrier is not None:
                     barrier.abort()
             for f in futures:
                 f.result()
@@ -68,7 +70,7 @@ def run_threaded(
 
 def test_parallel_triangulate_float32_simple() -> None:
     """Test that multiple threads can triangulate simple polygons simultaneously."""
-    results: list[NDArray[np.uint32] | None] = [None] * 8
+    results: List[Optional[NDArray[np.uint32]]] = [None] * 8
 
     def closure(i: int, b: threading.Barrier) -> None:
         # Create per-thread data to avoid sharing arrays
@@ -76,7 +78,7 @@ def test_parallel_triangulate_float32_simple() -> None:
         rings = np.array([3])
 
         # Synchronize all threads to maximize chance of race condition
-        b.wait()
+        _ = b.wait()
 
         # Perform triangulation
         result = earcut.triangulate_float32(verts, rings)
@@ -92,17 +94,17 @@ def test_parallel_triangulate_float32_simple() -> None:
         assert result is not None, f"Thread {i} didn't produce a result"
         assert result.dtype == np.uint32
         assert result.shape == (3,)
-        assert np.all(result == expected), f"Thread {i} got incorrect result"
+        assert np.array_equal(result, expected), f"Thread {i} got incorrect result"
 
 
 def test_parallel_triangulate_float64_simple() -> None:
     """Test that multiple threads can triangulate with float64 simultaneously."""
-    results: list[NDArray[np.uint32] | None] = [None] * 8
+    results: List[Optional[NDArray[np.uint32]]] = [None] * 8
 
     def closure(i: int, b: threading.Barrier) -> None:
         verts = np.array([[0, 0], [1, 0], [1, 1]], dtype=np.float64).reshape(-1, 2)
         rings = np.array([3])
-        b.wait()
+        _ = b.wait()
         result = earcut.triangulate_float64(verts, rings)
         results[i] = result
 
@@ -111,17 +113,17 @@ def test_parallel_triangulate_float64_simple() -> None:
     expected = np.array([1, 2, 0])
     for result in results:
         assert result is not None
-        assert np.all(result == expected)
+        assert np.array_equal(result, expected)
 
 
 def test_parallel_triangulate_int32_simple() -> None:
     """Test that multiple threads can triangulate with int32 simultaneously."""
-    results: list[NDArray[np.uint32] | None] = [None] * 8
+    results: List[Optional[NDArray[np.uint32]]] = [None] * 8
 
     def closure(i: int, b: threading.Barrier) -> None:
         verts = np.array([[0, 0], [1, 0], [1, 1]], dtype=np.int32).reshape(-1, 2)
         rings = np.array([3])
-        b.wait()
+        _ = b.wait()
         result = earcut.triangulate_int32(verts, rings)
         results[i] = result
 
@@ -130,17 +132,17 @@ def test_parallel_triangulate_int32_simple() -> None:
     expected = np.array([1, 2, 0])
     for result in results:
         assert result is not None
-        assert np.all(result == expected)
+        assert np.array_equal(result, expected)
 
 
 def test_parallel_triangulate_int64_simple() -> None:
     """Test that multiple threads can triangulate with int64 simultaneously."""
-    results: list[NDArray[np.uint32] | None] = [None] * 8
+    results: List[Optional[NDArray[np.uint32]]] = [None] * 8
 
     def closure(i: int, b: threading.Barrier) -> None:
         verts = np.array([[0, 0], [1, 0], [1, 1]], dtype=np.int64).reshape(-1, 2)
         rings = np.array([3])
-        b.wait()
+        _ = b.wait()
         result = earcut.triangulate_int64(verts, rings)
         results[i] = result
 
@@ -149,7 +151,7 @@ def test_parallel_triangulate_int64_simple() -> None:
     expected = np.array([1, 2, 0])
     for result in results:
         assert result is not None
-        assert np.all(result == expected)
+        assert np.array_equal(result, expected)
 
 
 # Complex polygon thread safety tests
@@ -157,7 +159,7 @@ def test_parallel_triangulate_int64_simple() -> None:
 
 def test_parallel_triangulate_square() -> None:
     """Test parallel triangulation of a square."""
-    results: list[NDArray[np.uint32] | None] = [None] * 16
+    results: List[Optional[NDArray[np.uint32]]] = [None] * 16
 
     def closure(i: int, b: threading.Barrier) -> None:
         # Square polygon
@@ -166,7 +168,7 @@ def test_parallel_triangulate_square() -> None:
         ).reshape(-1, 2)
         rings = np.array([4])
 
-        b.wait()
+        _ = b.wait()
         result = earcut.triangulate_float32(verts, rings)
         results[i] = result
 
@@ -183,7 +185,7 @@ def test_parallel_triangulate_square() -> None:
 
 def test_parallel_triangulate_with_hole() -> None:
     """Test parallel triangulation of a polygon with a hole."""
-    results: list[NDArray[np.uint32] | None] = [None] * 8
+    results: List[Optional[NDArray[np.uint32]]] = [None] * 8
 
     def closure(i: int, b: threading.Barrier) -> None:
         # Outer square
@@ -195,7 +197,7 @@ def test_parallel_triangulate_with_hole() -> None:
         verts = np.vstack([outer, inner]).reshape(-1, 2)
         rings = np.array([4, 8])  # First ring ends at 4, second at 8
 
-        b.wait()
+        _ = b.wait()
         result = earcut.triangulate_float32(verts, rings)
         results[i] = result
 
@@ -207,12 +209,12 @@ def test_parallel_triangulate_with_hole() -> None:
     for result in results[1:]:
         assert result is not None
         assert result.shape == first_result.shape
-        assert np.all(result == first_result)
+        assert np.array_equal(result, first_result)
 
 
 def test_parallel_triangulate_complex_shape() -> None:
     """Test parallel triangulation with a more complex polygon."""
-    results: list[NDArray[np.uint32] | None] = [None] * 12
+    results: List[Optional[NDArray[np.uint32]]] = [None] * 12
 
     def closure(i: int, b: threading.Barrier) -> None:
         # Hexagon
@@ -220,7 +222,7 @@ def test_parallel_triangulate_complex_shape() -> None:
         verts = np.column_stack([np.cos(angles), np.sin(angles)]).astype(np.float64)
         rings = np.array([6])
 
-        b.wait()
+        _ = b.wait()
         result = earcut.triangulate_float64(verts, rings)
         results[i] = result
 
@@ -245,7 +247,7 @@ def test_high_contention_same_shape() -> None:
     to maximize the chance of exposing race conditions.
     """
     num_threads = 32
-    results: list[NDArray[np.uint32] | None] = [None] * num_threads
+    results: List[Optional[NDArray[np.uint32]]] = [None] * num_threads
 
     def closure(i: int, b: threading.Barrier) -> None:
         verts = np.array([[0, 0], [5, 0], [5, 5], [0, 5]], dtype=np.float32).reshape(
@@ -253,7 +255,8 @@ def test_high_contention_same_shape() -> None:
         )
         rings = np.array([4])
 
-        b.wait()
+        _ = b.wait()
+        result = None
         # Run multiple times in each thread
         for _ in range(10):
             result = earcut.triangulate_float32(verts, rings)
@@ -275,12 +278,12 @@ def test_high_contention_same_shape() -> None:
 
 def test_mixed_operations() -> None:
     """Test mixing different data types in parallel."""
-    results: list[NDArray[np.uint32] | None] = [None] * 16
+    results: List[Optional[NDArray[np.uint32]]] = [None] * 16
 
     def closure(i: int, b: threading.Barrier) -> None:
         # Each thread uses a different dtype based on its index
         dtypes = [np.float32, np.float64, np.int32, np.int64]
-        funcs: list[Callable[[Any, Any], NDArray[np.uint32]]] = [
+        funcs: List[Callable[[Any, Any], NDArray[np.uint32]]] = [
             earcut.triangulate_float32,
             earcut.triangulate_float64,
             earcut.triangulate_int32,
@@ -293,7 +296,7 @@ def test_mixed_operations() -> None:
         verts = np.array([[0, 0], [1, 0], [1, 1]], dtype=dtype).reshape(-1, 2)
         rings = np.array([3])
 
-        b.wait()
+        _ = b.wait()
         result = func(verts, rings)
         results[i] = result
 
@@ -304,12 +307,12 @@ def test_mixed_operations() -> None:
     expected = np.array([1, 2, 0])
     for result in results:
         assert result is not None
-        assert np.all(result == expected)
+        assert np.array_equal(result, expected)
 
 
 def test_varying_sizes() -> None:
     """Test with varying polygon sizes across threads."""
-    results: list[NDArray[np.uint32] | None] = [None] * 20
+    results: List[Optional[NDArray[np.uint32]]] = [None] * 20
 
     def closure(i: int, b: threading.Barrier) -> None:
         # Create polygons of different sizes based on thread index
@@ -318,7 +321,7 @@ def test_varying_sizes() -> None:
         verts = np.column_stack([np.cos(angles), np.sin(angles)]).astype(np.float32)
         rings = np.array([num_sides])
 
-        b.wait()
+        _ = b.wait()
         result = earcut.triangulate_float32(verts, rings)
         results[i] = result
 
@@ -342,15 +345,15 @@ def test_varying_sizes() -> None:
 
 def test_parallel_invalid_rings() -> None:
     """Test that multiple threads can handle invalid input simultaneously."""
-    exceptions: list[ValueError | None] = [None] * 8
+    exceptions: List[Optional[ValueError]] = [None] * 8
 
     def closure(i: int, b: threading.Barrier) -> None:
         verts = np.array([[0, 0], [1, 0], [1, 1]], dtype=np.float32).reshape(-1, 2)
         rings = np.array([5])  # Invalid: larger than verts
 
-        b.wait()
+        _ = b.wait()
         try:
-            earcut.triangulate_float32(verts, rings)
+            _ = earcut.triangulate_float32(verts, rings)
             exceptions[i] = None
         except ValueError as e:
             exceptions[i] = e
@@ -365,7 +368,9 @@ def test_parallel_invalid_rings() -> None:
 
 def test_parallel_mixed_valid_invalid() -> None:
     """Test mixing valid and invalid inputs across threads."""
-    results: list[tuple[str, NDArray[np.uint32] | ValueError] | None] = [None] * 16
+    results: List[Optional[Tuple[str, Union[NDArray[np.uint32], ValueError]]]] = [
+        None
+    ] * 16
 
     def closure(i: int, b: threading.Barrier) -> None:
         verts = np.array([[0, 0], [1, 0], [1, 1]], dtype=np.float32).reshape(-1, 2)

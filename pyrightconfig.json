@@ -1,0 +1,9 @@
+{
+  "pythonVersion": "3.9",
+  "typeCheckingMode": "basic",
+  "include": [
+    "mapbox_earcut",
+    "tests"
+  ],
+  "reportInvalidTypeForm": "none"
+}
