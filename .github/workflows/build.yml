@@ -32,8 +32,8 @@ jobs:
           # and to split the remaining architectures between the x86_64 and
           # ARM runners
           CIBW_ARCHS_LINUX: ${{ runner.arch == 'X64' && 'auto ppc64le s390x' || 'auto' }}
-          # Need this to be >= 10.13 to support C++17 aligned allocations
-          MACOSX_DEPLOYMENT_TARGET: 10.13
+          # Need this to be >= 10.13 to support C++17 aligned allocations on Intel
+          MACOSX_DEPLOYMENT_TARGET: ${{ matrix.os == 'macos-15-intel' && '10.13' || (startsWith(matrix.os, 'macos') && '11.0' || '') }}
 
       - name: Show files
         run: ls -lh wheelhouse
