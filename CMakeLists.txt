@@ -25,10 +25,8 @@ nanobind_add_module(
 )
 target_include_directories(_core PRIVATE include)
 
-# Add -fno-aligned-allocation flag for macOS Intel architecture
-# If this is omitted, builds on MacOS intel will fail
 if(APPLE AND CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-  target_compile_options(_core PRIVATE -fno-aligned-allocation)
+  target_compile_options(_core PRIVATE -mmacosx-version-min=10.13)
 endif()
 
 nanobind_add_stub(
