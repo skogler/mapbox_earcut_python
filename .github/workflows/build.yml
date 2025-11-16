@@ -8,15 +8,33 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+          - windows-latest
+          - windows-11-arm
+          - macos-15-intel
+          - macos-14
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+
+      - name: Set up QEMU
+        if: runner.os == 'Linux' && runner.arch == 'X64'
+        uses: docker/setup-qemu-action@v3
         with:
-          submodules: recursive
+          platforms: all
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.22.0
+        uses: pypa/cibuildwheel@v3.3.0
+        env:
+          # configure cibuildwheel on Linux to build native archs ('auto'),
+          # and to split the remaining architectures between the x86_64 and
+          # ARM runners
+          CIBW_ARCHS_LINUX: ${{ runner.arch == 'X64' && 'auto ppc64le s390x' || 'auto' }}
+          # enable cpython-freethreading necessary only for 3.13t
+          # CIBW_ENABLE: cpython-freethreading
+          CIBW_BUILD: cp314t-${{ matrix.buildplat }}
 
       - name: Show files
         run: ls -lh wheelhouse
