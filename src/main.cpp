@@ -72,20 +72,18 @@ auto triangulate(const VertexArray<CoordT>& vertices, const IndexArray<IndexT>& 
     ).cast();
 }
 
-NB_MODULE(mapbox_earcut, m)
+NB_MODULE(_core, m)
 {
     m.attr("__version__") = MACRO_TO_STR(VERSION_MAJOR) "." MACRO_TO_STR(VERSION_MINOR) "." MACRO_TO_STR(VERSION_PATCH);
     m.doc() = R"pbdoc(
         Python bindings to mapbox/earcut.hpp
         -----------------------
 
-        .. currentmodule:: mapbox_earcut
+        .. currentmodule:: mapbox_earcut._core
 
         .. autosummary::
            :toctree: _generate
 
-           add
-           subtract
     )pbdoc";
 
     m.def("triangulate_int32", &triangulate<int32_t, uint32_t>);
