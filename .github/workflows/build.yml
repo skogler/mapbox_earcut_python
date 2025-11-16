@@ -34,6 +34,8 @@ jobs:
           CIBW_ARCHS_LINUX: ${{ runner.arch == 'X64' && 'auto ppc64le s390x' || 'auto' }}
           # Need this to be >= 10.13 to support C++17 aligned allocations on Intel
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.os == 'macos-15-intel' && '10.13' || (startsWith(matrix.os, 'macos') && '11.0' || '') }}
+          # Only build Python 3.11+ on Windows 11 ARM
+          CIBW_BUILD: ${{ matrix.os == 'windows-11-arm' && 'cp311-* cp312-* cp313-* cp314-*' || '' }}
 
       - name: Show files
         run: ls -lh wheelhouse
