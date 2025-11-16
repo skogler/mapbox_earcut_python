@@ -6,20 +6,19 @@ readme = "README.md"
 authors = [{ name = "Samuel Kogler" }]
 requires-python = ">=3.9"
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: ISC License (ISCL)",
-    "Programming Language :: C++",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: ISC License (ISCL)",
+  "Programming Language :: C++",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
 ]
-dependencies = [
-    "numpy",
-]
+dependencies = ["numpy"]
 
 [project.urls]
 Source = "https://github.com/skogler/mapbox_earcut_python"
@@ -35,7 +34,7 @@ regex = '''(?sx)
 result = "{major}.{minor}.{patch}"
 
 [build-system]
-requires = ["pybind11>=2.12", "scikit-build-core"]
+requires = ["nanobind>=2.9.2", "scikit-build-core"]
 build-backend = "scikit_build_core.build"
 
 [tool.cibuildwheel]
