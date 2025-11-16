@@ -32,9 +32,6 @@ jobs:
           # and to split the remaining architectures between the x86_64 and
           # ARM runners
           CIBW_ARCHS_LINUX: ${{ runner.arch == 'X64' && 'auto ppc64le s390x' || 'auto' }}
-          # enable cpython-freethreading necessary only for 3.13t
-          # CIBW_ENABLE: cpython-freethreading
-          CIBW_BUILD: cp314t-${{ matrix.buildplat }}
 
       - name: Show files
         run: ls -lh wheelhouse
