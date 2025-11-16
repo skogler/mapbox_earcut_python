@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0.0
+
+## Added
+
+- Support for 3.14 and free-threaded Python
+
+## Changed
+
+- Wheels are now typed and have a minimal Python wrapper to contain the package in a directory when installed
+- Wheels are now built using Python Stable ABI
+- Due to conflicts with free-threaded Python had to remove support for Python Limited API
+  - This just means new wheels will be required for every major Python version again
+- Decided to bump the major version since the wheels won't be binary compatible
+- Build now uses nanobind instead of pybind11
+
 ## [1.0.3]
 
 ## Changed
@@ -42,7 +57,6 @@
 
 - Update `earcut.hpp` to 2.2.3 (with fixed includes, latest version from master).
 - Change versioning scheme to enable semantic versioning independently from upstream versioning.
-
 
 ## [1.0.0]
 
