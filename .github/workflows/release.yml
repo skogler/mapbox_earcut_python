@@ -28,7 +28,7 @@ jobs:
         VERSION=${GITHUB_REF#refs/*/}
         sed -n "/^## \\[${VERSION:1}\\]/,/^## \\[/p" CHANGELOG.md | sed '1,1d; $d' > RELEASE.md
     - name: Publish release to GitHub
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         draft: true
         body_path: RELEASE.md
