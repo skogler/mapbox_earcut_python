@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v3.3.0
+        uses: pypa/cibuildwheel@v3.4.1
         env:
           # Only build native arch on linux (x86_64 and arm64)
           CIBW_ARCHS_LINUX: auto
