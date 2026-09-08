@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0]
+
+### Changed
+
+- Updated `earcut.hpp` to version 3.2.3.
+- Upstream C++ port catch-up to `earcut.js` v3.2.3 with ~2x faster triangulation performance, block-index acceleration for holes, and hot-path microoptimizations.
+
 ## 2.0.0
 
 ## Added
