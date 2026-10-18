@@ -14,10 +14,10 @@
 namespace nb = nanobind ;
 
 template<typename CoordT>
-using VertexArray = nb::ndarray<CoordT, nb::shape<-1, 2>, nb::device::cpu>;
+using VertexArray = nb::ndarray<const CoordT, nb::shape<-1, 2>, nb::device::cpu>;
 
 template<typename IndexT>
-using IndexArray = nb::ndarray<IndexT, nb::shape<-1>, nb::device::cpu>;
+using IndexArray = nb::ndarray<const IndexT, nb::shape<-1>, nb::device::cpu>;
 
 
 //! vertices: (nverts, 2) numpy array
