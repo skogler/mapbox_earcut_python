@@ -125,3 +125,27 @@ def test_empty_data():
     result = earcut.triangulate_float32(verts, rings)
 
     assert result.shape == (0,)
+
+
+@pytest.mark.parametrize("dtype", ["int32", "int64", "float32", "float64"])
+@pytest.mark.parametrize("readonly_vertices, readonly_rings", [
+    (True, False), (False, True), (True, True),
+])
+def test_readonly_inputs(dtype, readonly_vertices, readonly_rings):
+    vertices = np.array([[0, 0], [4, 0], [4, 3]], dtype=dtype)
+    rings = np.array([3], dtype=np.uint32)
+    original_vertices = vertices.copy()
+    original_rings = rings.copy()
+    if readonly_vertices:
+        vertices.flags.writeable = False
+    if readonly_rings:
+        rings.flags.writeable = False
+
+    result = getattr(earcut, "triangulate_" + dtype)(vertices, rings)
+
+    assert result.dtype == np.uint32
+    np.testing.assert_array_equal(result, [1, 2, 0])
+    np.testing.assert_array_equal(vertices, original_vertices)
+    np.testing.assert_array_equal(rings, original_rings)
+    assert vertices.flags.writeable == (not readonly_vertices)
+    assert rings.flags.writeable == (not readonly_rings)
